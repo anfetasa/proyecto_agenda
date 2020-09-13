@@ -83,6 +83,7 @@ h1 {
 }
 
 input[type="text"],
+[type="password"],
 [type="email"],
 select,
 textarea {
@@ -109,6 +110,7 @@ textarea {
 }
 
 input[type="text"]:focus,
+[type="password"]:focus,
 [type="email"]:focus,
 textarea:focus {
   outline: none;
@@ -229,6 +231,7 @@ textarea {
 
   input[type="text"],
   [type="email"],
+  [type="password"],
   select,
   textarea {
     font-size: 0.875em;
