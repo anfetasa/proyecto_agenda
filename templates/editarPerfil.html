@@ -1,0 +1,29 @@
+
+{% extends 'layout.html' %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="#" >
+{% endblock %}
+
+{% block body %}
+
+<form action ="/actualizar_perfil" method="POST" id="contact_form">
+    <div class="name">
+    <label for="name"></label>
+    <input type="text" placeholder="INGRESE SU NOMBRE" name="nombre" id="name_input" value="{{ usuarios.1}}" required>
+    </div>
+    <div class="email">
+    <label for="email"></label>
+    <input type="email" placeholder="INGRESE SU CORREO" name="correo" id="email_input" value="{{ usuarios.2}}"  required>
+    </div>
+    <div class="contraseña">
+    <label for="name"></label>
+    <input type="text" placeholder="INGRESE UNA CONTRASEÑA" name="contraseña" id="contraseña_input" value="{{ usuarios.3}}"  required>
+    </div>
+    <div class="submit">
+    <input type="submit" value="Modificar" id="form_button" />
+    </div>
+  </form>
+  <a href="/cerrar_sesion"><button>Cerrar sesion</button></a>
+
+{% endblock %}

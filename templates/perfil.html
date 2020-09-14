@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="#" >
+{% endblock %}
+
+{% block body %}
+<table>
+    <thead>
+        <tr>
+            <td>Nombre</td>
+            <td>Correo</td>
+            <td>Contraseña</td>
+            <td>Configuracion</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for usuario in usuarios %}
+            <tr>
+                <td>{{ usuario.1 }}</td>
+                <td>{{ usuario.2 }}</td>
+                <td>{{ usuario.3 }}</td>
+                <td><a href="/editar_perfil">editar</a></td>
+                <td><a href="/cerrar_sesion"><button>Cerrar sesion</button></a></td>
+            </tr> 
+        {% endfor%}
+    </tbody>
+</table>
+{% endblock %}
