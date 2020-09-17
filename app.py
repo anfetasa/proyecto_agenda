@@ -1,20 +1,6 @@
 
-from flask import Flask, render_template, request, redirect, url_for
-from flask_mysqldb import MySQL
-
-app = Flask(__name__)
-
-app.config['MYSQL_HOST'] = '127.0.0.1'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'agenda'
-mysql = MySQL(app)
-
-
-app.secret_key = "urioe28934r8ee78rg9iue2h3u4ytg89i3rj958tj4398r"
-
-@app.route("/")
-def index():
+@app.route("/eventos")
+def eventos():
     con = mysql.connection.cursor()
     con.execute("SELECT * FROM eventos")
     data = con.fetchall()
@@ -64,5 +50,3 @@ def cambiarc(id):
         mysql.connection.commit()
         return redirect(url_for('index'))
 
-if __name__== "__main__":
-	app.run(debug=True)
