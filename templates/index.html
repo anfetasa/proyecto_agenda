@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 {% extends 'layout.html' %}
 
 {% block head %}
@@ -6,15 +6,6 @@
 {% endblock %}
 
 {% block body %}
-=======
-<!DOCTYPE html>
-<html>
-<head>
-	<title>index</title>
-	<meta charset="utf-8">
-</head>
-<body>
->>>>>>> 5a26501645a5688d42dfe8e763de57e8321db4d3
 <center>
 <form action="/agregar" method="POST">
 	<input type="text" name="titulo" placeholder="titulo"><br><br>
@@ -22,10 +13,7 @@
 	<input type="time" name="hora"><br><br>
 	<input type="text" name="descripcion" placeholder="descripcion"><br><br>
 	<input type="submit">
-<<<<<<< HEAD
 
-=======
->>>>>>> 5a26501645a5688d42dfe8e763de57e8321db4d3
 </form>
 <br><br>
 
@@ -44,7 +32,7 @@
 		{% for row in data %}
 		<tr class="tr-activo">
 			<td class="colum2" style="text-align:center;">{{row.1}}</td>
-<<<<<<< HEAD
+
 			<td class="colum2">{{row.3}}</td>
 			<td class="colum2">{{row.4}}</td>
 			<td class="colum2" style="text-align:center;">{{row.5}}</td>
@@ -62,16 +50,5 @@
 <td><a href="/ver_perfil"><button>perfil</button></a></td>
 </center>
 {% endblock %}
-=======
-			<td class="colum2">{{row.2}}</td>
-			<td class="colum2">{{row.3}}</td>
-			<td class="colum2" style="text-align:center;">{{row.4}}</td>
-			<td><a href="/cambiar/{{row.0}}">Editar</a></td>
-			<td><a href="/borrar/{{row.0}}">Eliminar</a></td>
-		</tr>
-        {% endfor %}
-</table>
-</center>
-</body>
-</html>
->>>>>>> 5a26501645a5688d42dfe8e763de57e8321db4d3
+
+
