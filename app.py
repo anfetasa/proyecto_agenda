@@ -17,7 +17,7 @@ app.config['MYSQL_DB'] = 'proyecto_agenda'
 
 mysql = MySQL(app)
 
-
+#el siguiente bloque de codigo fue realizado por Andres Taborda
 
 #ruta principal que renderiza el template html del formulario de inicio de sesion
 
@@ -119,9 +119,8 @@ def home():
     #se hace una validacion de que este iniciada sesion con ayuda de las cookies
     
     if session['logged_in'] == True:
-        flash('Felicidades, inicio sesion')
-
-        return redirect(url_for('index'))
+        
+        return redirect(url_for('eventos'))
 
     #Si no ha iniciado sesion lo redirige al formulario de inicio de sesion
     else:
@@ -217,8 +216,84 @@ def cerrar_sesion():
     session.pop('logged_in', None)
     session.pop('username', None) 
     session.pop('password', None)
+    session.pop('id', None)
 
     return redirect(url_for('index'))
+
+#fin bloque de codigo de andres
+
+#el siguiente bloque de codigo fue realizado por sebatian rodriguez
+
+#ruta que rederiza la seccion donde se visualizan los eventos
+@app.route("/eventos")
+def eventos():
+    if session['logged_in'] == True:
+        idUsuario = session['id']
+        con = mysql.connection.cursor()
+        con.execute("SELECT * FROM eventos WHERE idUsuario = %s" % idUsuario)
+        data = con.fetchall()
+        return render_template("index.html", data=data)
+    else:
+        return "Primero inicie sesion"
+
+#ruta para agregar un nuevo evento
+@app.route('/agregar', methods=['POST'])
+def agregar():
+    if session['logged_in'] == True:
+        if request.method == 'POST':
+            idUsuario = session['id']
+            titulo = request.form['titulo']
+            hora = request.form['hora']
+            fecha = request.form['fecha']
+            descripcion = request.form['descripcion']
+            con = mysql.connection.cursor()
+            con.execute("INSERT INTO eventos (titulo,hora,dia,descripcion,idUsuario) VALUES (%s,%s,%s,%s,%s)",
+                        (titulo, hora, fecha, descripcion, idUsuario))
+            mysql.connection.commit()
+            return redirect(url_for("eventos"))
+    else: 
+        return "Primero inicie sesion"
+
+#ruta para eliminar un evento
+@app.route("/borrar/<string:id>")
+def borrar(id):
+    if session['logged_in'] == True:
+        con = mysql.connection.cursor()
+        con.execute("DELETE FROM eventos WHERE id = {0}".format(id))
+        mysql.connection.commit()
+        return redirect(url_for("eventos"))
+    else: 
+        return "Primero inice sesion"
+
+#ruta para modificar un evento y renderizar el formulario
+@app.route('/cambiar/<id>', methods=['POST', 'GET'])
+def cambiar(id):
+    if session['logged_in'] == True:
+        con = mysql.connection.cursor()
+        con.execute('SELECT * FROM eventos WHERE id = %s', (id,))
+        data = con.fetchall()
+        con.close()
+        return render_template('change.html', data=data)
+    return "Primero inicie sesion"
+
+#ruta en la que se confirma que modifica un evento
+@app.route("/cambiarc/<id>", methods=['POST'])
+def cambiarc(id):
+    if session['logged_in'] == True:
+        if request.method == 'POST':
+            titulo = request.form['titulo']
+            hora = request.form['hora']
+            fecha = request.form['fecha']
+            descripcion = request.form['descripcion']
+            con = mysql.connection.cursor()
+            con.execute("""
+                UPDATE eventos SET titulo = %s, hora = %s, dia = %s, descripcion = %s WHERE id = %s """, (titulo, hora, fecha, descripcion, id,))
+            mysql.connection.commit()
+            return redirect(url_for('eventos'))
+    return "Primero inicie sesion"
+#Fin bloque de codigo de sebatian
+
+
 
 if __name__ == '__main__':
     app.run(port= 3000, debug= True)
