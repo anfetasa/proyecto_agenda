@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+  	<title>Eventos grupales</title>
+{% endblock %}
+
+{% block body %}
+<form action="/eventoGrupal" method="POST">
+    <input type="text" name="usuarios" nitplaceholder="Ingrese el correo de los usuarios separados por un ; y sin espacios"><br><br>
+	<input type="text" name="titulo" placeholder="titulo"><br><br>
+	<input type="date" name="fecha"><br><br>
+	<input type="time" name="hora"><br><br>
+	<input type="text" name="descripcion" placeholder="descripcion"><br><br>
+	<input type="submit">
+
+</form>
+{% endblock %}

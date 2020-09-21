@@ -54,7 +54,7 @@ def add_user():
 
         if contraseña == confirmar_pass and result == 0:
             cur.execute('INSERT INTO usuarios (nombre, correo, contraseña) VALUES (%s,%s,%s)', (nombre, correo, contraseña))
-
+            
             mysql.connection.commit()
             #El comando flash almacena el mensaje que sobrepone en pantalla y se imprime en el html
             flash('Usuario agregado satisfactoriamente')
@@ -294,9 +294,66 @@ def cambiarc(id):
 #Fin bloque de codigo de sebatian
 
 
+@app.route("/eventoGrupal", methods=['POST', 'GET'])
+def eventoGrupal():
+    idGrupo = []
+    idGrupo2 = []
+    usuarioNoEncontrado = []
+    if session['logged_in'] == True:
+        idUsuario = session['id']
+        if request.method == 'POST':
+            
+            usuarios = request.form['usuarios']
+            listaUsuarios = usuarios.split(";")
+            titulo = request.form['titulo']
+            hora = request.form['hora']
+            fecha = request.form['fecha']
+            descripcion = request.form['descripcion']
+            print(listaUsuarios)
+            con = mysql.connection.cursor()
+            for i in listaUsuarios:
+                con.execute("SELECT idUsuarios FROM usuarios Where correo = %s", (i,))
+                x = con.fetchone()
+                print(x)
+                if x != None:
+                    idGrupo.append(x)
+                else:
+                   usuarioNoEncontrado.append(i)
+
+            print(idGrupo)
+            print(usuarioNoEncontrado)
+            for i in idGrupo:
+                for x in i:
+                    idGrupo2.append(x)
+
+            print(listaUsuarios,idGrupo2)
+            if len(listaUsuarios) == len(idGrupo2):
+                
+                con.execute("INSERT INTO eventos (titulo,hora,dia,descripcion,idUsuario) VALUES (%s,%s,%s,%s,%s)", (titulo, hora, fecha, descripcion, idUsuario))
+
+                mysql.connection.commit()
+
+                for i in idGrupo2:
+                    con.execute("INSERT INTO eventos (titulo,hora,dia,descripcion,idUsuario) VALUES (%s,%s,%s,%s,%s)", (titulo, hora, fecha, descripcion, i))
+                    print(i)
+                    mysql.connection.commit()
+                return redirect(url_for("eventos"))
+            else:
+    
+
+                for i in usuarioNoEncontrado:
+                    flash('Usuario no encontrado: ' + i)
+                    return redirect(url_for('eventoGrupal'))
+
+        return render_template('eventoGrupal.html')
+    else: 
+        return"Primero inicie sesion"
+
+
 
 if __name__ == '__main__':
     app.run(port= 3000, debug= True)
+
 
 
 
