@@ -30,15 +30,21 @@
 	</thead>
 	<tbody>
 		{% for row in data %}
-		<tr class="tr-activo">
-			<td class="colum2" style="text-align:center;">{{row.1}}</td>
-
-			<td class="colum2">{{row.3}}</td>
-			<td class="colum2">{{row.4}}</td>
-			<td class="colum2" style="text-align:center;">{{row.5}}</td>
-			<td><a href="/cambiar/{{row.0}}">Editar</a></td>
-			<td><a href="/borrar/{{row.0}}">Eliminar</a></td>
-		</tr>
+			{% if row.2  ==  idUsuario: %}
+				<tr class="tr-activo"></tr>
+				<td class="colum2" style="text-align:center;">{{row.1}}</td>
+				<td class="colum2">{{row.3}}</td>
+				<td class="colum2">{{row.4}}</td>
+				<td class="colum2" style="text-align:center;">{{row.5}}</td>
+				{% if row.6  ==  idUsuario: %}
+					<td><a href="/cambiar/{{row.0}}/{{row.1}}/{{row.3}}/{{row.4}}/{{row.5}}">Editar</a></td>
+				{% endif %}
+				{% if row.6  ==  None: %}
+					<td><a href="/cambiar/{{row.0}}/{{row.1}}/{{row.3}}/{{row.4}}/{{row.5}}">Editar</a></td>
+				{% endif %}
+				<td><a href="/borrar/{{row.0}}/{{row.1}}/{{row.3}}/{{row.4}}/{{row.5}}">Eliminar</a></td>
+				</tr>
+			{% endif %}
 		{% endfor %}
 	</tbody>
 </table>

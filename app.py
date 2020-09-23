@@ -23,7 +23,7 @@ mysql = MySQL(app)
 
 @app.route('/')
 def index():
-
+    session['logged_in'] = False
     return render_template('login.html')
 
 #ruta que renderiza el template html del formulario de registro de usuario
@@ -47,8 +47,6 @@ def add_user():
         
         cur = mysql.connection.cursor()
         result = cur.execute("SELECT * FROM usuarios WHERE correo= '%s'" % correo)
-        print(result)
-        print(nombre)
 
         #se hace una validacion de que las contraseñas coincidan y que no exista el usuario
 
@@ -117,13 +115,14 @@ def inicio():
 def home():
 
     #se hace una validacion de que este iniciada sesion con ayuda de las cookies
-    
-    if session['logged_in'] == True:
+
+    if session['logged_in'] == True :
         
         return redirect(url_for('eventos'))
 
     #Si no ha iniciado sesion lo redirige al formulario de inicio de sesion
     else:
+        flash ("Primero inicie sesion")
         return redirect(url_for('index'))
 
 #ruta para rederizar el perfil.html
@@ -142,8 +141,7 @@ def verPerfil():
         return render_template('perfil.html', usuarios = data)
 
     else:
-        flash('Error, no ha iniciado sesion')
-
+        flash ("Primero inicie sesion")
         return redirect(url_for('index'))
 
 #ruta para renderizar la parte de editar pefil
@@ -160,41 +158,31 @@ def editarPerfil():
         cur.execute("SELECT * FROM usuarios WHERE idusuarios =%s" % idUsuario)
         data = cur.fetchall()
         return render_template('editarPerfil.html', usuarios = data[0])
+
     else:
-        return "Error al iniciar sesion"
+        flash ("Primero inicie sesion")
+        return redirect(url_for('index'))
 
 #metodo para editar el perfil de la base de datos
 
 @app.route('/actualizar_perfil', methods=['POST' ,'GET'])
 
 def actualizar():
-    #se extrae la nueva informacion del formulario
-    if request.method =='POST':
-        idUsuario = session['id']
-        nombre = request.form['nombre']
-        correo = request.form['correo']
-        contraseña = request.form['contraseña']
-        str(idUsuario)
-        
-        correo2 = session['username']
-        cur = mysql.connection.cursor()
+    if session['logged_in'] == True:
+        #se extrae la nueva informacion del formulario
+        if request.method =='POST':
+            idUsuario = session['id']
+            nombre = request.form['nombre']
+            correo = request.form['correo']
+            contraseña = request.form['contraseña']
+            str(idUsuario)
+            
+            correo2 = session['username']
+            cur = mysql.connection.cursor()
 
-        #validaciones de que si va a modificar su usuario, el usuario no exista en la base de datos
-        if correo2 == correo:
-        #se actualiza en la base de datos
-            cur.execute("UPDATE usuarios SET nombre= %s, correo = %s, contraseña= %s WHERE idusuarios =%s" , (nombre, correo, contraseña, idUsuario))
-
-            #se confirma la actualizacion
-
-            mysql.connection.commit()
-
-            flash('Actualizado correctamente')
-    
-            return redirect(url_for('verPerfil'))
-
-        else: 
-            result = cur.execute("SELECT * FROM usuarios WHERE correo= '%s'" % correo)
-            if result == 0:
+            #validaciones de que si va a modificar su usuario, el usuario no exista en la base de datos
+            if correo2 == correo:
+            #se actualiza en la base de datos
                 cur.execute("UPDATE usuarios SET nombre= %s, correo = %s, contraseña= %s WHERE idusuarios =%s" , (nombre, correo, contraseña, idUsuario))
 
                 #se confirma la actualizacion
@@ -204,14 +192,31 @@ def actualizar():
                 flash('Actualizado correctamente')
         
                 return redirect(url_for('verPerfil'))
-            else: 
-                flash('Usuario ya registrado')
 
-                return redirect(url_for('verPerfil'))
+            else: 
+                result = cur.execute("SELECT * FROM usuarios WHERE correo= '%s'" % correo)
+                if result == 0:
+                    cur.execute("UPDATE usuarios SET nombre= %s, correo = %s, contraseña= %s WHERE idusuarios =%s" , (nombre, correo, contraseña, idUsuario))
+
+                    #se confirma la actualizacion
+
+                    mysql.connection.commit()
+
+                    flash('Actualizado correctamente')
+            
+                    return redirect(url_for('verPerfil'))
+                else: 
+                    flash('Usuario ya registrado')
+
+                    return redirect(url_for('verPerfil'))
+    else:
+        flash ("Primero inicie sesion")
+        return redirect(url_for('index'))
 
 #metodo para cerrar sesion
 
 @app.route('/cerrar_sesion')
+
 def cerrar_sesion():
     session.pop('logged_in', None)
     session.pop('username', None) 
@@ -227,14 +232,15 @@ def cerrar_sesion():
 #ruta que rederiza la seccion donde se visualizan los eventos
 @app.route("/eventos")
 def eventos():
-    if session['logged_in'] == True:
+    if session['logged_in'] == True :
         idUsuario = session['id']
         con = mysql.connection.cursor()
-        con.execute("SELECT * FROM eventos WHERE idUsuario = %s" % idUsuario)
+        con.execute("SELECT * FROM eventos WHERE idLider=%s OR idUsuario= %s", (idUsuario, idUsuario))
         data = con.fetchall()
-        return render_template("index.html", data=data)
+        return render_template("index.html", data=data, idUsuario = idUsuario)
     else:
-        return "Primero inicie sesion"
+        flash ("Primero inicie sesion")
+        return redirect(url_for('index'))
 
 #ruta para agregar un nuevo evento
 @app.route('/agregar', methods=['POST'])
@@ -247,53 +253,87 @@ def agregar():
             fecha = request.form['fecha']
             descripcion = request.form['descripcion']
             con = mysql.connection.cursor()
-            con.execute("INSERT INTO eventos (titulo,hora,dia,descripcion,idUsuario) VALUES (%s,%s,%s,%s,%s)",
-                        (titulo, hora, fecha, descripcion, idUsuario))
+            con.execute("INSERT INTO eventos (titulo,hora,dia,descripcion,idUsuario) VALUES (%s,%s,%s,%s,%s)", (titulo, hora, fecha, descripcion, idUsuario))
             mysql.connection.commit()
+            flash ("Evento agregado satisfactoriamente")
             return redirect(url_for("eventos"))
-    else: 
-        return "Primero inicie sesion"
+    else:
+        flash ("Primero inicie sesion")
+        return redirect(url_for('index'))
 
 #ruta para eliminar un evento
-@app.route("/borrar/<string:id>")
-def borrar(id):
+@app.route("/borrar/<string:id>/<string:titulo>/<string:hora>/<string:dia>/<string:descripcion>")
+def borrar(id, titulo, hora, dia, descripcion):
     if session['logged_in'] == True:
+        idUsuario = session['id']
         con = mysql.connection.cursor()
-        con.execute("DELETE FROM eventos WHERE id = {0}".format(id))
-        mysql.connection.commit()
+        titulo1= "{0}".format(titulo)
+        hora1= "{0}".format(hora)
+        dia1= "{0}".format(dia)
+        descripcion1= "{0}".format(descripcion)
+        query = con.execute("SELECT * FROM eventos WHERE idLider = %s AND titulo  = %s AND hora  = %s AND dia  = %s AND descripcion  = %s" , (idUsuario, titulo1, hora1, dia1, descripcion1))
+        if query == 0:
+            con.execute("DELETE FROM eventos WHERE id = {0}".format(id))
+            mysql.connection.commit()
+        elif query >= 1:
+            con.execute("DELETE FROM eventos WHERE idLider = %s AND titulo  = %s AND hora  = %s AND dia  = %s AND descripcion  = %s" , (idUsuario, titulo1, hora1, dia1, descripcion1))
+            mysql.connection.commit()
+        flash ("Eliminado satisfactoriamente")
         return redirect(url_for("eventos"))
-    else: 
-        return "Primero inice sesion"
+    else:
+        flash ("Primero inicie sesion")
+        return redirect(url_for('index'))
 
 #ruta para modificar un evento y renderizar el formulario
-@app.route('/cambiar/<id>', methods=['POST', 'GET'])
-def cambiar(id):
-    if session['logged_in'] == True:
+@app.route('/cambiar/<string:id>/<string:titulo>/<string:hora>/<string:dia>/<string:descripcion>', methods=['POST', 'GET'])
+def cambiar(id, titulo, hora, dia, descripcion):
+    if session['logged_in'] == True :
+        idUsuario = session['id']
         con = mysql.connection.cursor()
         con.execute('SELECT * FROM eventos WHERE id = %s', (id,))
         data = con.fetchall()
         con.close()
+
         return render_template('change.html', data=data)
-    return "Primero inicie sesion"
+
+    else:
+        flash ("Primero inicie sesion")
+        return redirect(url_for('index'))
 
 #ruta en la que se confirma que modifica un evento
-@app.route("/cambiarc/<id>", methods=['POST'])
-def cambiarc(id):
+@app.route("/cambiarc/<string:id>/<string:titulo>/<string:hora>/<string:dia>/<string:descripcion>", methods=['POST'])
+def cambiarc(id, titulo, hora, dia, descripcion):
     if session['logged_in'] == True:
         if request.method == 'POST':
-            titulo = request.form['titulo']
-            hora = request.form['hora']
-            fecha = request.form['fecha']
-            descripcion = request.form['descripcion']
+            idUsuario = session['id']
+            titulo2 = request.form['titulo']
+            hora2 = request.form['hora']
+            fecha2 = request.form['fecha']
+            descripcion2 = request.form['descripcion']
             con = mysql.connection.cursor()
-            con.execute("""
-                UPDATE eventos SET titulo = %s, hora = %s, dia = %s, descripcion = %s WHERE id = %s """, (titulo, hora, fecha, descripcion, id,))
-            mysql.connection.commit()
+            titulo1= "{0}".format(titulo)
+            hora1= "{0}".format(hora)
+            dia1= "{0}".format(dia)
+            descripcion1= "{0}".format(descripcion)
+            query = con.execute("SELECT * FROM eventos WHERE idLider = %s AND titulo  = %s AND hora  = %s AND dia  = %s AND descripcion  = %s" , (idUsuario, titulo1, hora1, dia1, descripcion1))
+            if query == 0:
+                con.execute("""
+                    UPDATE eventos SET titulo = %s, hora = %s, dia = %s, descripcion = %s WHERE id = %s """, (titulo2, hora2, fecha2, descripcion2, id,))
+                mysql.connection.commit()
+            elif query >= 1:
+                con.execute("""
+                    UPDATE eventos SET titulo = %s, hora = %s, dia = %s, descripcion = %s WHERE idLider = %s AND titulo  = %s AND hora  = %s AND dia  = %s AND descripcion  = %s """, (titulo2, hora2, fecha2, descripcion2, idUsuario, titulo1, hora1, dia1, descripcion1))
+                mysql.connection.commit()
+            flash ("Actaulizado satisfactoriamente")
             return redirect(url_for('eventos'))
-    return "Primero inicie sesion"
+    else:
+        flash ("Primero inicie sesion")
+        return redirect(url_for('index'))
 #Fin bloque de codigo de sebatian
 
+#Inicio bloque de codigo de andres
 
+#Ruta para crear eventos grupales
 @app.route("/eventoGrupal", methods=['POST', 'GET'])
 def eventoGrupal():
     idGrupo = []
@@ -303,40 +343,34 @@ def eventoGrupal():
         idUsuario = session['id']
         if request.method == 'POST':
             
+            #se toman los datos proporcionados por el creador del evento grupal y se almacenan en la base de datos
             usuarios = request.form['usuarios']
             listaUsuarios = usuarios.split(";")
             titulo = request.form['titulo']
             hora = request.form['hora']
             fecha = request.form['fecha']
             descripcion = request.form['descripcion']
-            print(listaUsuarios)
             con = mysql.connection.cursor()
             for i in listaUsuarios:
                 con.execute("SELECT idUsuarios FROM usuarios Where correo = %s", (i,))
                 x = con.fetchone()
-                print(x)
                 if x != None:
                     idGrupo.append(x)
                 else:
                    usuarioNoEncontrado.append(i)
-
-            print(idGrupo)
-            print(usuarioNoEncontrado)
             for i in idGrupo:
                 for x in i:
                     idGrupo2.append(x)
-
-            print(listaUsuarios,idGrupo2)
             if len(listaUsuarios) == len(idGrupo2):
                 
-                con.execute("INSERT INTO eventos (titulo,hora,dia,descripcion,idUsuario) VALUES (%s,%s,%s,%s,%s)", (titulo, hora, fecha, descripcion, idUsuario))
+                con.execute("INSERT INTO eventos (titulo,hora,dia,descripcion,idUsuario, idLider) VALUES (%s,%s,%s,%s,%s, %s)", (titulo, hora, fecha, descripcion, idUsuario, idUsuario))
 
                 mysql.connection.commit()
 
                 for i in idGrupo2:
-                    con.execute("INSERT INTO eventos (titulo,hora,dia,descripcion,idUsuario) VALUES (%s,%s,%s,%s,%s)", (titulo, hora, fecha, descripcion, i))
-                    print(i)
+                    con.execute("INSERT INTO eventos (titulo,hora,dia,descripcion,idUsuario, idLider) VALUES (%s,%s,%s,%s,%s, %s)", (titulo, hora, fecha, descripcion, i, idUsuario))
                     mysql.connection.commit()
+                flash ("Reunion grupal creada satisfactoriamente")
                 return redirect(url_for("eventos"))
             else:
     
@@ -346,10 +380,11 @@ def eventoGrupal():
                     return redirect(url_for('eventoGrupal'))
 
         return render_template('eventoGrupal.html')
-    else: 
-        return"Primero inicie sesion"
+    else:
+        flash ("Primero inicie sesion")
+        return redirect(url_for('index'))
 
-
+#Fin bloque de codigo de andres
 
 if __name__ == '__main__':
     app.run(port= 3000, debug= True)

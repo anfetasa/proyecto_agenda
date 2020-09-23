@@ -7,7 +7,7 @@
 
 {% block body %}
 {% for row in data %}
-	<form action="/cambiarc/{{row.0}}" method="POST">
+	<form action="/cambiarc/{{row.0}}/{{row.1}}/{{row.3}}/{{row.4}}/{{row.5}}" method="POST">
 	<input type="text" name="titulo" placeholder="titulo" value="{{row.1}}"><br><br>
 	<input type="date" name="fecha" value="{{row.4}}"><br><br>
 	<input type="text" name="hora" value="{{row.3}}"><br><br>

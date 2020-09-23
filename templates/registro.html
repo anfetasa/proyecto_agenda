@@ -11,7 +11,7 @@
     <!-- formulario de registro -->
 
     <div id="container">
-      <h1>&bull; ANGEDATA &bull;</h1>
+      <h1>&bull; ANGEDATE &bull;</h1>
       <div class="underline">
       </div>
       <div class="icon_wrapper">
@@ -23,31 +23,39 @@
       <form action ="/add_user" method="POST" id="contact_form">
         <div class="name">
         <label for="name"></label>
-        <input type="text" placeholder="INGRESE SU NOMBRE" name="nombre" id="name_input" required>
+          <input type="text" placeholder="INGRESE SU NOMBRE" name="nombre" id="name_input" required>
         </div>
         <div class="email">
         <label for="email"></label>
-        <input type="email" placeholder="INGRESE SU CORREO" name="correo" id="email_input" required>
+          <input type="email" placeholder="INGRESE SU CORREO" name="correo" id="email_input" required>
         </div>
         <div class="contraseña">
         <label for="name"></label>
-        <input type="password" placeholder="INGRESE UNA CONTRASEÑA" name="contraseña" id="contraseña_input" required>
+          <input type="password" placeholder="INGRESE UNA CONTRASEÑA" name="contraseña" id="contraseña_input" required>
         </div>
         <div class="contraseña">
         <label for="name"></label>
-        <input type="password" placeholder="CONFIRMAR CONTRASEÑA" name="confirmar_pass" id="contraseña_input" required>
+          <input type="password" placeholder="CONFIRMAR CONTRASEÑA" name="confirmar_pass" id="contraseña_input" required>
         </div>
-        <div class="submit">
-        <input type="submit" value="REGISTRARSE" id="form_button" />
-        </div>
-        <br>
-        <br>
-      </form>
-      <form action="/">
-        <div class="submit">
-          <input type="submit" value="Iniciar sesion" id="form_button" />
-        </div>
-      </form>
+
+        <table ALIGN="right">
+          <tr>
+            <td>
+              <div class="submit">
+                <input type="submit" value="REGISTRARSE" id="form_button"/>
+              </div>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="submit">
+                <button type="submit" id="form_button" class="boton" ><a href="/">INICIAR SESION</a></button>
+              </div>
+            </td>
+          </tr>
+        </table> 
+        
+        
     </div>
 
     <!-- Importaciones scripts -->

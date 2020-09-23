@@ -17,9 +17,10 @@ body {
   
   #container {
     border: solid 3px #474544;
-    max-width: 900px;
-    margin: 60px auto;
+    width: 950px;
+    margin: 50px auto;
     position: relative;
+    padding: 10px;
   }
   
   
@@ -233,6 +234,8 @@ body {
 }
 
 nav{
-    width: 600px;
+    width: 850px;
     margin: auto;
+    margin-right: 60px;
+    text-align: center;
 }

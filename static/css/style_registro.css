@@ -237,3 +237,7 @@ textarea {
     font-size: 0.875em;
   }
 }
+
+button{
+  height: 60px;
+}
