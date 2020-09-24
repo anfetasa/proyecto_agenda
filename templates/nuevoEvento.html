@@ -1,12 +1,9 @@
-
 {% extends 'layout.html' %}
 
 {% block head %}
-      <title>Modificar</title>
-
-	  <link rel="stylesheet" href="{{ url_for('static', filename='css/style_informe_agenda.css') }}">
-	  <link rel="stylesheet" href="{{ url_for('static', filename='css/style_evento_grupal.css') }}">
-      
+      <title>Nuevo Evento</title>
+      <link rel="stylesheet" type="text/css" href="../static/css/style_informe_agenda.css" >
+      <link rel="stylesheet" type="text/css" href="../static/css/style_evento_grupal.css" >
 {% endblock %}
 
 {% block body %}
@@ -14,7 +11,7 @@
 <div id="container">
     <h1 style="text-align: center;">&bull; Agen date &bull;</h1>
     <br>
-    <h1 style="color:gray; font-size: 28px; text-align: center;">&bull; Editar &bull;</h1>
+    <h1 style="color:gray; font-size: 28px; text-align: center;">&bull; Nuevo Evento &bull;</h1>
     <div class="underline" style="text-align: center;">
     </div>
     <div class="icon_wrapper">
@@ -31,49 +28,47 @@
               <li id="about"><a href="/eventoGrupal">Evento grupal</a></li>
               <li id="contact"><a href="/ver_perfil">Perfil</a></li>
           </ul>
-	  </nav>
+      </nav>
 
-
-	<div class="contenedorForm">
-		{% for row in data %}
-			<form action="/cambiarc/{{row.0}}/{{row.1}}/{{row.3}}/{{row.4}}/{{row.5}}" method="POST" class="formulario1">
-				<table align="center">
-					<tr>
-						<td style="padding: 30px;">
-							<input style="text-align: center;" type="text" class="datos" name="titulo" value="{{row.1}}" placeholder="titulo">
-							<br>
-						</td>
-						<td style="padding: 30px;">
-							<input type="date" style= "text-align: center;" class="datos" value="{{row.4}}" name="fecha">
-							
-						</td>
-					</tr>
-					<tr>
-						<td style="padding: 30px;">
-							<input name="descripcion" rows="10" cols="40" class="descripcion1" value="{{row.5}}" placeholder="Descripcion">
-						</td>
-						<td style="padding: 30px;">
-							<input type="time" style= "text-align: center;" class="datos"name="hora" value="{{row.3}}">
-						</td>
-					</tr>
-				</table>
-				<br>
-				<div class="container1">
-					<div class="center">
-					<button type="submit" class="btn">
-						<svg width="180px" height="60px" viewBox="0 0 180 60" class="border">
-						<polyline points="179,1 179,59 1,59 1,1 179,1" class="bg-line" />
-						<polyline points="179,1 179,59 1,59 1,1 179,1" class="hl-line" />
-						</svg>
-						<span>MODIFICAR</span>
-					</button>
-					</div>
+    <div class="contenedorForm">  
+		<form action="/agregar" method="POST" class="formulario1">
+			<table align="center">
+				<tr>
+					<td style="padding: 30px;">
+						<input type="text" class="datos" name="titulo" placeholder="titulo">
+						<br>
+					</td>
+					<td style="padding: 30px;">
+						<input type="date" style= "text-align: center;" class="datos" name="fecha">
+						
+					</td>
+				</tr>
+				<tr>
+					<td style="padding: 30px;">
+						<!-- <input type="text" name="descripcion" class="descripcion1"  placeholder="descripcion"> -->
+						<textarea name="descripcion" rows="10" cols="40" class="descripcion1" placeholder="Descripcion de tu evento"></textarea>
+					</td>
+					<td style="padding: 30px;">
+						<input type="time" style= "text-align: center;" class="datos"name="hora">
+					</td>
+				</tr>
+			</table>
+			<br>
+			<div class="container1">
+				<div class="center">
+				  <button type="submit" class="btn">
+					<svg width="180px" height="60px" viewBox="0 0 180 60" class="border">
+					  <polyline points="179,1 179,59 1,59 1,1 179,1" class="bg-line" />
+					  <polyline points="179,1 179,59 1,59 1,1 179,1" class="hl-line" />
+					</svg>
+					<span>CREAR</span>
+				  </button>
 				</div>
-				<br>
-				<br>
-			</form>
-		{%endfor%} 
+			</div>
+			<!-- <input type="submit"> -->
+			<br>
+			<br>
+		</form> 
 	</div>
 </div>
 {% endblock %}
-

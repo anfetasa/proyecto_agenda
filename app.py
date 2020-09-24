@@ -243,6 +243,14 @@ def eventos():
         return redirect(url_for('index'))
 
 #ruta para agregar un nuevo evento
+@app.route ("/nuevoEvento")
+def nuevoEvento():
+    if session['logged_in'] == True :
+          return render_template("nuevoEvento.html")
+    else:
+        flash ("Primero inicie sesion")
+        return redirect(url_for('index'))
+
 @app.route('/agregar', methods=['POST'])
 def agregar():
     if session['logged_in'] == True:
@@ -324,7 +332,7 @@ def cambiarc(id, titulo, hora, dia, descripcion):
                 con.execute("""
                     UPDATE eventos SET titulo = %s, hora = %s, dia = %s, descripcion = %s WHERE idLider = %s AND titulo  = %s AND hora  = %s AND dia  = %s AND descripcion  = %s """, (titulo2, hora2, fecha2, descripcion2, idUsuario, titulo1, hora1, dia1, descripcion1))
                 mysql.connection.commit()
-            flash ("Actaulizado satisfactoriamente")
+            flash ("Actualizado satisfactoriamente")
             return redirect(url_for('eventos'))
     else:
         flash ("Primero inicie sesion")
@@ -366,6 +374,7 @@ def eventoGrupal():
                 con.execute("INSERT INTO eventos (titulo,hora,dia,descripcion,idUsuario, idLider) VALUES (%s,%s,%s,%s,%s, %s)", (titulo, hora, fecha, descripcion, idUsuario, idUsuario))
 
                 mysql.connection.commit()
+                print(fecha)
 
                 for i in idGrupo2:
                     con.execute("INSERT INTO eventos (titulo,hora,dia,descripcion,idUsuario, idLider) VALUES (%s,%s,%s,%s,%s, %s)", (titulo, hora, fecha, descripcion, i, idUsuario))
@@ -386,8 +395,56 @@ def eventoGrupal():
 
 #Fin bloque de codigo de andres
 
+
+#Filtar
+
+@app.route("/filetitulo", methods=['POST'])
+
+def filetitulo():
+    if request.method == "POST":
+        titulo = request.form['titulo']
+        con = mysql.connection.cursor()
+        con.execute('SELECT * FROM eventos WHERE titulo=%s',(titulo,))
+        data = con.fetchall()
+        idUsuario = session['id']
+        return render_template("index.html", data=data, idUsuario = idUsuario)
+
+@app.route("/filehora", methods=['POST'])
+
+def filehora():
+    if request.method == "POST":
+        hora = request.form['hora']
+        print(hora)
+        h = "%H:%i"
+        con = mysql.connection.cursor()
+        con.execute('SELECT * FROM eventos WHERE DATE_FORMAT(hora, %s )  = %s',(h, hora,))
+        data = con.fetchall()
+        idUsuario = session['id']
+        return render_template("index.html", data=data,idUsuario = idUsuario)
+
+@app.route("/filefecha", methods=['POST'])
+
+def filefecha():
+    if request.method == "POST":
+        fecha = request.form['fecha']
+        con = mysql.connection.cursor()
+        con.execute('SELECT *FROM eventos WHERE dia=%s',(fecha,))
+        data = con.fetchall()
+        idUsuario = session['id']
+        return render_template("index.html", data=data, idUsuario = idUsuario)
+
+@app.route("/filedescripcion", methods=['POST'])
+
+def filedescripcion():
+    if request.method == "POST":
+        descripcion = request.form['descripcion']
+        con = mysql.connection.cursor()
+        idUsuario = session['id']
+        con.execute('SELECT * FROM eventos WHERE descripcion=%s',(descripcion,))
+        data = con.fetchall()
+        return render_template("index.html", data=data, idUsuario = idUsuario)
 if __name__ == '__main__':
-    app.run(port= 3000, debug= True)
+    app.run(port= 3000)
 
 
 

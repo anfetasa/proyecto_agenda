@@ -3,6 +3,7 @@
 {% block head %}
 <title>Perfil</title>
 <link rel="stylesheet" type="text/css" href="../static/css/style_informe_agenda.css" >
+<link rel="stylesheet" type="text/css" href="../static/css/style_perfil.css" >
 {% endblock %}
 
 
@@ -21,37 +22,82 @@
       <br>
       <nav>
           <ul class="fancyNav">
-              <li id="news"><a href="#news">Eventos</a></li>
-              <li id="about"><a href="#about">Nuevo nuevo</a></li>
-              <li id="about"><a href="#about">Evento grupal</a></li>
-              <li id="services"><a href="#services">Filtrar</a></li>
-              <li id="contact"><a href="#contact">Perfil</a></li>
+              <li id="news"><a href="/eventos">Eventos</a></li>
+              <li id="about"><a href="/nuevoEvento">Nuevo Evento</a></li>
+              <li id="about"><a href="/eventoGrupal">Evento grupal</a></li>
+              <li id="contact"><a href="/ver_perfil">Perfil</a></li>
           </ul>
       </nav>
     </div>
-    <table border="1" align="center">
-        <thead>
+    <div class="tablaPerfil">
+        <table align="center">
             <tr>
-                <td>Nombre</td>
-                <td>Correo</td>
-                <td>Contraseña</td>
-                <td>Configuracion</td>
+                <td>
+                    <div class="borde_imagen">
+                        <img src="https://cdn.pixabay.com/photo/2016/10/25/18/27/unknown-1769656_960_720.png" class="imagen">
+                    </div>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            {% for usuario in usuarios %}
-                <tr>
-                    <td>{{ usuario.1 }}</td>
-                    <td>{{ usuario.2 }}</td>
-                    <td>{{ usuario.3 }}</td>
-                    <td><a href="/editar_perfil">editar</a></td>
-                    <td><a href="/cerrar_sesion"><button>Cerrar sesion</button></a></td>
-                    <td><a href="/eventos"><button>Eventos</button></a></td>
-                </tr> 
-            {% endfor%}
-        </tbody>
-    </table>
-    
-    
-  </div>
+            <tr>
+                <td>
+                    <div class="nombre">
+                        {% for usuario in usuarios %}
+                        {{ usuario.1 }}
+                        {% endfor%}
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <br><br>
+        <div class="padre">
+            <div class="hijo">
+                <table align="center"></table>
+                    <tr>
+                        <td>
+                            <h1 class="texto1">Correo</h1>
+                        </td>
+                    </tr>
+                    <br>
+                    <tr>
+                        <td>
+                            <div class="correo">
+                                {% for usuario in usuarios %}
+                                {{ usuario.2 }}
+                                {% endfor%}
+                            </div>
+                        </td>
+                </table>
+                <div class="editar">
+                    <a href="/cerrar_sesion"><button class="button type2">
+                        Cerrar sesion
+                    </button></a>
+                </div>
+            </div>
+            <div class="hijo">
+                <table align="center"></table>
+                    <tr>
+                        <td>
+                            <h1 class="texto1">Constraseña</h1>
+                        </td>
+                    </tr>
+                    <br>
+                    <tr>
+                        <td>
+                            <div class="correo">
+                                {% for usuario in usuarios %}
+                                {{ usuario.3 }}
+                                {% endfor%}
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <div class="editar">
+                    <a href="/editar_perfil"><button class="button type3">
+                        Editar
+                    </button></a>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>
 {% endblock %}

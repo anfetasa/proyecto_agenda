@@ -1,0 +1,189 @@
+@import url("https://fonts.googleapis.com/css?family=Raleway");
+
+
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Courgette&family=Kalam:wght@700&display=swap');
+.tablaPerfil{
+    height: 600px;
+    width: 800px;
+    text-align: center;
+    margin: auto;
+    position: relative;
+
+}
+
+.imagen{
+    height: 130px;
+    width: 120px;
+    border-radius: 40px;
+
+}
+
+.borde_imagen{
+    height: 160px;
+    width: 160px;
+    border-radius: 100px;
+    border-color: black;
+    border-width: 3px;
+    border-style: solid;
+    text-align: center;
+    margin: auto;
+    align-items: center;
+    padding: 10px;
+    padding-right: 15px;
+    justify-content: center;
+}
+
+.nombre{
+    font-size: 40px;
+    font-family: Brush Script MT;
+}
+
+.padre{
+    width: 700px;
+    height:300px ;
+    margin: auto;
+    overflow: hidden;
+}
+
+.hijo{
+    position:relative;
+    float: left;
+    width: 50%;
+    height: 100%;
+
+
+}
+
+.texto1{
+    font-size: 17px;
+    font-family: 'Kalam', cursive;
+    
+    color: rgb(117, 115, 115);
+}
+
+.correo{
+    width: 250px;
+    height: 50px;
+    margin: auto;
+    text-align: center;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-color: rgb(105, 3, 109);
+    border-style: solid;
+    border-top: 2px;
+    border-left: 0px;
+    border-right: 0px;
+    
+    background: -webkit-linear-gradient(rgb(252, 252, 255), rgb(215, 215, 216)); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(rgb(252, 252, 255), rgb(215, 215, 216)); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(rgb(252, 252, 255), rgb(215, 215, 216)); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(rgb(252, 252, 255), rgb(215, 215, 216)); /* Standard syntax */
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    font-size: 22px;
+    font-family: 'Courgette', cursive;
+    height:fit-content; 
+    word-wrap: break-word;
+
+
+}
+
+.copyright {
+    position: absolute;
+    bottom: 0;
+  }
+  .copyright a {
+    text-decoration: none;
+    color: #16a085;
+  }
+  .copyright a:hover {
+    text-decoration: underline;
+  }
+  
+  .button {
+    position: relative;
+    padding: 1em 1.5em;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    outline: none;
+    font-size: 18px;
+    margin: auto;
+  }
+
+  .editar{
+      height: 65px;
+      width: auto;
+      left:0px; 
+      right:0px; 
+      bottom:0px;
+      z-index:0;
+      position:absolute;
+      
+  }
+
+  .cerrar{
+      width: 150px;
+      height: 100px;
+      position: absolute;
+      margin: 0 auto;
+      bottom:0px;
+      z-index:0;
+      position:absolute;
+      margin: 0 auto;
+      left: 0;
+      right: 0;
+  }
+
+  .button.type2 {
+    color: #16a085;
+  }
+  .button.type2.type2:after, .button.type2.type2:before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #16a085;
+    transition: all 0.3s ease;
+    transform: scale(0.85);
+  }
+  .button.type2.type2:hover:before {
+    top: 0;
+    transform: scale(1);
+  }
+  .button.type2.type2:hover:after {
+    transform: scale(1);
+  }
+
+  asdasd
+
+  .button.type3 {
+    color: #566473;
+  }
+  .button.type3.type3:after, .button.type3.type3:before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #566473;
+    transition: all 0.3s ease;
+    transform: scale(0.85);
+  }
+  .button.type3.type3:hover:before {
+    top: 0;
+    transform: scale(1);
+  }
+  .button.type3.type3:hover:after {
+    transform: scale(1);
+  }
+
