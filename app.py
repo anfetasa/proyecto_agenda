@@ -402,9 +402,9 @@ def eventoGrupal():
 
 def filetitulo():
     if request.method == "POST":
-        titulo = request.form['titulo']
+        titulo = "%" + request.form['titulo'] + "%"
         con = mysql.connection.cursor()
-        con.execute('SELECT * FROM eventos WHERE titulo=%s',(titulo,))
+        con.execute('SELECT * FROM eventos WHERE titulo LIKE %s',(titulo,))
         data = con.fetchall()
         idUsuario = session['id']
         return render_template("index.html", data=data, idUsuario = idUsuario)
@@ -437,14 +437,17 @@ def filefecha():
 
 def filedescripcion():
     if request.method == "POST":
-        descripcion = request.form['descripcion']
+        descripcion ="%" + request.form['descripcion'] + "%"
         con = mysql.connection.cursor()
         idUsuario = session['id']
-        con.execute('SELECT * FROM eventos WHERE descripcion=%s',(descripcion,))
+        con.execute('SELECT * FROM eventos WHERE descripcion LIKE  %s',(descripcion,))
+        
         data = con.fetchall()
+        print("hola")
+        print(data)
         return render_template("index.html", data=data, idUsuario = idUsuario)
 if __name__ == '__main__':
-    app.run(port= 3000)
+    app.run(port= 3000, debug=True)
 
 
 
